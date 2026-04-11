@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>OracleWise/Studio · Sites de elite construídos em 14 dias</title>
+<meta name="description" content="Sites de alta conversão e curso Design IA Master. Para os 3% que entenderam que IA não substitui gosto. Amplifica." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Geist+Mono:wght@100..900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: {
+          serif: ['"DM Serif Display"', 'serif'],
+          mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
+          sans: ['Inter', 'system-ui', 'sans-serif'],
+        },
+        colors: {
+          obsidian: '#080808',
+          silver: '#E2E8F0',
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  :root {
+    --obsidian: #080808;
+    --silver: #E2E8F0;
+    --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  * { -webkit-font-smoothing: antialiased; }
+
+  html, body {
+    background: var(--obsidian);
+    color: var(--silver);
+    font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+  }
+
+  .container-fluid { width: 92vw; max-width: 1680px; margin-inline: auto; }
+
+  .silver-text {
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .glass {
+    background: rgba(255,255,255,0.02);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .silver-btn {
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    color: #080808;
+    transition: all .4s var(--ease-out-expo);
+  }
+  .silver-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 20px rgba(255,255,255,0.15);
+  }
+
+  .nav-link {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: all .3s var(--ease-out-expo);
+  }
+  .nav-link:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.20); }
+
+  .hero-frame {
+    border-radius: 4rem;
+    background: rgba(255,255,255,0.015);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(24px);
+  }
+  @media (max-width: 768px) { .hero-frame { border-radius: 2rem; } }
+
+  .headline {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(42px, 10vw, 140px);
+    line-height: 0.85;
+    letter-spacing: -0.04em;
+  }
+
+  .h-section {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(36px, 7vw, 92px);
+    line-height: 0.9;
+    letter-spacing: -0.03em;
+  }
+
+  .label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.3em;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .bento {
+    background: rgba(255,255,255,0.01);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: all .6s var(--ease-out-expo);
+  }
+  .bento:hover {
+    background: rgba(255,255,255,0.03);
+    border-color: rgba(255,255,255,0.20);
+  }
+
+  .slide-up { opacity: 0; transform: translateY(40px); animation: slideUp .9s var(--ease-out-expo) forwards; }
+  @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+  .d1 { animation-delay: .1s; } .d2 { animation-delay: .25s; } .d3 { animation-delay: .4s; } .d4 { animation-delay: .55s; } .d5 { animation-delay: .7s; }
+
+  .countdown-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(48px, 9vw, 120px);
+    line-height: 1;
+    color: rgba(255,255,255,0.92);
+  }
+  .countdown-sep {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(48px, 9vw, 120px);
+    color: rgba(255,255,255,0.10);
+    line-height: 1;
+  }
+
+  .testimonial-quote {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+    font-size: clamp(28px, 3.6vw, 52px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+
+  .grayscale-img { filter: grayscale(100%) contrast(125%); }
+
+  /* Floating mobile nav */
+  .mobile-nav {
+    background: rgba(8,8,8,0.85);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.10);
+    transition: all .8s var(--ease-out-expo);
+  }
+  .mobile-nav.hidden-state { transform: translate(-50%, 8rem); opacity: 0; }
+
+  .input-clean {
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 100%;
+    color: #fff;
+    font-family: 'Geist Mono', monospace;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+  }
+  .input-clean::placeholder { color: rgba(255,255,255,0.35); }
+
+  .divider { height: 1px; background: rgba(255,255,255,0.08); width: 100%; }
+
+  /* ===== Creepy CTA — silver button with peeking eyes ===== */
+  .creepy-cta {
+    position: relative;
+    display: inline-block;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .creepy-cta__eyes {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    right: 2em;
+    bottom: 0.85em;
+    height: 0.9em;
+    z-index: 0;
+    pointer-events: none;
+    font-size: 12px;
+  }
+  .creepy-cta__eye {
+    width: 0.9em;
+    height: 0.9em;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    display: block;
+    border: 1px solid rgba(0,0,0,0.35);
+    animation: cb-blink 4s infinite;
+  }
+  .creepy-cta__pupil {
+    position: absolute;
+    width: 0.45em;
+    height: 0.45em;
+    background: #080808;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    display: block;
+    transform: translate(-50%, -50%);
+    transition: transform .05s linear;
+  }
+  .creepy-cta__cover {
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    color: #080808;
+    border-radius: 0.75rem;
+    display: block;
+    position: relative;
+    z-index: 1;
+    transform-origin: 1.5em 50%;
+    transition: transform .45s cubic-bezier(0.65, 0, 0.35, 1),
+                box-shadow .45s var(--ease-out-expo);
+    box-shadow: 0 0 0 1px rgba(0,0,0,0.08) inset;
+  }
+  .creepy-cta:hover .creepy-cta__cover {
+    transform: rotate(-12deg);
+    box-shadow: 0 0 25px rgba(255,255,255,0.18), 0 0 0 1px rgba(0,0,0,0.08) inset;
+    transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1.65);
+  }
+
+  /* Small variant — short button: rotate more so eyes peek */
+  .creepy-cta--sm .creepy-cta__cover { transform-origin: 0.9em 50%; }
+  .creepy-cta--sm:hover .creepy-cta__cover { transform: rotate(-22deg); }
+  .creepy-cta--sm .creepy-cta__eyes {
+    font-size: 14px;
+    right: 1.4em;
+    bottom: 0.55em;
+    gap: 0.4em;
+  }
+
+  /* Large variant — wide button: rotate less so it doesn't overflow upward */
+  .creepy-cta--lg .creepy-cta__cover { transform-origin: 2.5em 50%; }
+  .creepy-cta--lg:hover .creepy-cta__cover { transform: rotate(-6deg); }
+  .creepy-cta--lg .creepy-cta__eyes {
+    font-size: 18px;
+    right: 2.2em;
+    bottom: 0.65em;
+    gap: 0.55em;
+  }
+  .creepy-cta:active .creepy-cta__cover {
+    transform: rotate(0);
+    transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  @keyframes cb-blink {
+    0%, 92%, 100% { animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0); height: 0.9em; }
+    96% { animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1); height: 0; }
+  }
+
+  .registry-item { transition: all .5s var(--ease-out-expo); }
+  .registry-item:hover { transform: translateX(4px); }
+  .registry-item:hover .reg-name { color: #fff; }
+  .registry-item:hover .reg-avatar { transform: scale(1.1); }
+  .reg-avatar { transition: transform .5s var(--ease-out-expo); }
+  .reg-name { color: rgba(255,255,255,0.6); transition: color .4s var(--ease-out-expo); }
+</style>
+</head>
+<body class="relative">
+
+<!-- ============ NAV ============ -->
+<header class="relative z-20 pt-8">
+  <div class="container-fluid flex items-center justify-between">
+    <a href="#" class="font-mono text-[12px] tracking-[0.3em] uppercase text-white">
+      ORACLEWISE<span class="text-white/40">/STUDIO</span>
+    </a>
+
+    <nav class="hidden md:flex items-center gap-2">
+      <a href="#metodo" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Método</a>
+      <a href="#prova" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Casos</a>
+      <a href="#curso" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Curso</a>
+      <a href="#aplicar" class="silver-btn rounded-full px-6 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase font-semibold ml-2">Aplicar</a>
+    </nav>
+
+    <button class="md:hidden font-mono text-[11px] tracking-[0.3em] uppercase text-white/80">MENU</button>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="relative z-10 pt-16 md:pt-28 pb-20 md:pb-32">
+  <div class="container-fluid">
+    <div class="hero-frame px-6 md:px-16 py-16 md:py-28 text-center relative">
+
+      <div class="slide-up d1 mb-10">
+        <span class="label">EDIÇÃO 04 · ABERTA POR 72 HORAS</span>
+      </div>
+
+      <h1 class="headline slide-up d2 text-white">
+        Sites de elite.<br/>
+        <span class="silver-text">Construídos em 14 dias.</span>
+      </h1>
+
+      <p class="slide-up d3 mt-10 max-w-2xl mx-auto text-white/60 text-base md:text-lg leading-relaxed font-light">
+        Duas vias para chegar lá. Aprenda o ofício no estúdio fechado, ou deixe que façamos por você em quatorze dias. O destino é o mesmo. A velocidade muda.
+      </p>
+
+      <!-- Metadata bar -->
+      <div class="slide-up d4 mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-4xl mx-auto pt-10 border-t border-white/10">
+        <div class="text-left md:text-center">
+          <div class="label mb-2">EST. / FUNDADO</div>
+          <div class="font-mono text-sm text-white">2024 · SÃO PAULO</div>
+        </div>
+        <div class="text-left md:text-center">
+          <div class="label mb-2">DISCIPLINA</div>
+          <div class="font-mono text-sm text-white">DESIGN-FIRST WEB STUDIO</div>
+        </div>
+        <div class="text-left md:text-center">
+          <div class="label mb-2">CAPACIDADE</div>
+          <div class="font-mono text-sm text-white">10 PROJETOS / MÊS</div>
+        </div>
+      </div>
+
+      <!-- Capture form -->
+      <div id="aplicar" class="slide-up d5 mt-16 max-w-2xl mx-auto">
+        <div class="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2">
+          <input type="email" placeholder="SEU.EMAIL@EMPRESA.COM" class="input-clean px-4 py-4" />
+          <button class="silver-btn rounded-xl px-8 py-4 font-mono text-[11px] tracking-[0.25em] uppercase font-bold whitespace-nowrap">
+            Aplicar →
+          </button>
+        </div>
+        <p class="label mt-4">RESPOSTA EM ATÉ 24H · SEM SCRIPTS DE VENDAS</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ COUNTDOWN ============ -->
+<section class="relative z-10 py-20 md:py-32 border-y border-white/10">
+  <div class="container-fluid text-center">
+    <div class="label mb-8">EDIÇÃO 04 · ENCERRA EM</div>
+    <div class="flex items-center justify-center gap-3 md:gap-6">
+      <div class="text-center">
+        <div class="countdown-num" id="cd-d">02</div>
+        <div class="label mt-3">DIAS</div>
+      </div>
+      <div class="countdown-sep">/</div>
+      <div class="text-center">
+        <div class="countdown-num" id="cd-h">14</div>
+        <div class="label mt-3">HORAS</div>
+      </div>
+      <div class="countdown-sep">/</div>
+      <div class="text-center">
+        <div class="countdown-num" id="cd-m">37</div>
+        <div class="label mt-3">MIN</div>
+      </div>
+      <div class="countdown-sep">/</div>
+      <div class="text-center">
+        <div class="countdown-num" id="cd-s">22</div>
+        <div class="label mt-3">SEG</div>
+      </div>
+    </div>
+    <p class="mt-12 max-w-xl mx-auto text-white/50 text-sm font-light leading-relaxed">
+      Quatro vagas restantes nesta edição. Quando fecharem, fecharam. Não abrimos exceções, não negociamos prazo.
+    </p>
+  </div>
+</section>
+
+<!-- ============ DOR / PAS ============ -->
+<section id="metodo" class="relative z-10 py-24 md:py-40">
+  <div class="container-fluid max-w-5xl">
+    <div class="label mb-8">01 · DIAGNÓSTICO</div>
+    <h2 class="h-section text-white mb-12">
+      Você não tem um problema<br/>
+      de design. <span class="silver-text">Tem um problema de gosto terceirizado.</span>
+    </h2>
+    <div class="grid md:grid-cols-2 gap-12 text-white/70 font-light text-base md:text-lg leading-relaxed">
+      <p>
+        Já gastou mais de mil reais em freelancer e recebeu de volta um Wix com fontes erradas. Já abriu o Canva às duas da manhã tentando fazer parecer "profissional". Já contratou agência e pagou caro por um site bonito que não vendeu nada.
+      </p>
+      <p>
+        O problema nunca foi a ferramenta. Foi quem segurou ela. Existe uma diferença real entre quem domina IA generativa para criar trabalho de classe mundial e quem só copia prompts do Twitter. Essa diferença custa dinheiro todo dia que você adia.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BENTO FEATURES ============ -->
+<section class="relative z-10 border-y border-white/10">
+  <div class="container-fluid">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+
+      <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="label mb-8">01 / VELOCIDADE</div>
+        <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">14 dias.</h3>
+        <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
+          Do briefing ao deploy. Inclui copy, design, código, integração e ajustes. Sem ciclos de seis meses.
+        </p>
+      </div>
+
+      <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="label mb-8">02 / CONVERSÃO</div>
+        <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">Vende ou refazemos.</h3>
+        <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
+          Garantia escrita em contrato. Se a página não bater 5% de conversão em 30 dias, refazemos do zero.
+        </p>
+      </div>
+
+      <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="label mb-8">03 / DESIGN-IA</div>
+        <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">Stack proprietária.</h3>
+        <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
+          Midjourney, Leonardo, Figma AI, Ideogram, Runway. Combinados em um método que ninguém mais usa.
+        </p>
+      </div>
+
+      <div class="bento p-8 md:p-12">
+        <div class="label mb-8">04 / SUPORTE</div>
+        <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">90 dias.</h3>
+        <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
+          Acesso direto ao estúdio por noventa dias. Ajustes ilimitados na primeira semana. Sem ticket, sem fila.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ DUAS VIAS · TIER COMPARISON ============ -->
+<section id="curso" class="relative z-10 py-24 md:py-40">
+  <div class="container-fluid">
+
+    <div class="text-center mb-20 md:mb-28">
+      <div class="label mb-6">02 · ARQUITETURA</div>
+      <h2 class="h-section text-white">
+        Duas vias.<br/><span class="silver-text">Mesmo destino.</span>
+      </h2>
+      <p class="mt-10 max-w-xl mx-auto text-white/55 font-light text-base leading-relaxed">
+        Você escolhe a velocidade. Aprender é mais barato e leva tempo. Delegar é mais caro e leva quatorze dias. Os dois caminhos chegam ao mesmo lugar.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6">
+
+      <!-- VIA 01 · CURSO -->
+      <div class="bento rounded-3xl p-8 md:p-14 relative flex flex-col">
+        <div class="flex items-center justify-between mb-10">
+          <div class="label">VIA 01 · APRENDA</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-white/40">DIY</div>
+        </div>
+
+        <h3 class="font-serif italic text-4xl md:text-6xl text-white leading-none mb-6">
+          Design IA<br/><span class="silver-text">Master.</span>
+        </h3>
+        <p class="text-white/55 font-light text-base leading-relaxed mb-10 max-w-md">
+          Curso fechado. Oito módulos. Você aprende a stack inteira que rodamos no estúdio e nunca mais paga ninguém para fazer seu design.
+        </p>
+
+        <div class="space-y-3 mb-12 flex-1">
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/65">
+            <span class="text-white/25">→</span> 8 módulos · 47 aulas práticas
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/65">
+            <span class="text-white/25">→</span> 500 prompts profissionais
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/65">
+            <span class="text-white/25">→</span> Midjourney · Figma AI · Leonardo
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/65">
+            <span class="text-white/25">→</span> Comunidade fechada · vitalícia
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/65">
+            <span class="text-white/25">→</span> Acesso por toda a vida
+          </div>
+        </div>
+
+        <div class="divider mb-8"></div>
+
+        <div class="flex items-end justify-between">
+          <div>
+            <div class="label mb-2">INVESTIMENTO</div>
+            <div class="font-serif italic text-5xl text-white">R$ 497</div>
+            <div class="font-mono text-[10px] text-white/40 mt-2">12X DE R$ 49,70</div>
+          </div>
+          <a href="#" class="nav-link rounded-xl px-6 py-3 font-mono text-[11px] tracking-[0.2em] uppercase font-bold text-white">
+            Acessar →
+          </a>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/5">
+          <p class="font-mono text-[10px] uppercase tracking-wider text-white/35 leading-relaxed">
+            Para quem tem mais tempo que dinheiro. Resultado em 30–60 dias.
+          </p>
+        </div>
+      </div>
+
+      <!-- VIA 02 · ESTÚDIO (destacado) -->
+      <div class="rounded-3xl p-8 md:p-14 relative flex flex-col" style="background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.18);">
+
+        <div class="absolute -top-3 left-8 md:left-14">
+          <span class="silver-btn rounded-full px-4 py-1.5 font-mono text-[9px] tracking-[0.25em] uppercase font-bold">RECOMENDADO</span>
+        </div>
+
+        <div class="flex items-center justify-between mb-10">
+          <div class="label">VIA 02 · DELEGUE</div>
+          <div class="font-mono text-[10px] uppercase tracking-wider text-white/40">DFY</div>
+        </div>
+
+        <h3 class="font-serif italic text-4xl md:text-6xl text-white leading-none mb-6">
+          Site que vende.<br/><span class="silver-text">Em 14 dias.</span>
+        </h3>
+        <p class="text-white/65 font-light text-base leading-relaxed mb-10 max-w-md">
+          Estúdio fechado. Nós escrevemos cada palavra, geramos cada imagem, codamos cada interação. Você acorda no dia quinze com um site que vende.
+        </p>
+
+        <div class="space-y-3 mb-12 flex-1">
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Site completo · até 8 páginas
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Copy estratégica · AIDA + PAS
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Design generativo · stack completa
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Integrações · WhatsApp · CRM · Pixel
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> 90 dias de suporte direto
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Painel IA editorial · 10 dias grátis
+          </div>
+          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
+            <span class="text-white/40">→</span> Garantia · vende ou refazemos
+          </div>
+        </div>
+
+        <div class="divider mb-8"></div>
+
+        <div class="flex items-end justify-between">
+          <div>
+            <div class="label mb-2">INVESTIMENTO</div>
+            <div class="font-serif italic text-5xl silver-text">R$ 4.997</div>
+            <div class="font-mono text-[10px] text-white/40 mt-2">12X DE R$ 497</div>
+          </div>
+          <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20para%20a%20Edi%C3%A7%C3%A3o%2004%20do%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--sm">
+            <span class="creepy-cta__eyes">
+              <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+              <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+            </span>
+            <span class="creepy-cta__cover px-6 py-3 font-mono text-[11px] tracking-[0.2em] uppercase font-bold">
+              Aplicar →
+            </span>
+          </a>
+        </div>
+
+        <div class="mt-8 pt-6 border-t border-white/10">
+          <p class="font-mono text-[10px] uppercase tracking-wider text-white/45 leading-relaxed">
+            Para quem tem mais dinheiro que tempo. Resultado em 14 dias. 4 vagas restantes nesta edição.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ VALUE / NUMBERS ============ -->
+<section class="relative z-10 py-24 md:py-32 border-y border-white/10">
+  <div class="container-fluid">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4">
+      <div class="text-center md:text-left">
+        <div class="font-serif italic text-5xl md:text-7xl silver-text">127</div>
+        <div class="label mt-4">PROJETOS ENTREGUES</div>
+      </div>
+      <div class="text-center md:text-left">
+        <div class="font-serif italic text-5xl md:text-7xl silver-text">14d</div>
+        <div class="label mt-4">PRAZO MÉDIO</div>
+      </div>
+      <div class="text-center md:text-left">
+        <div class="font-serif italic text-5xl md:text-7xl silver-text">8.2%</div>
+        <div class="label mt-4">CONVERSÃO MÉDIA</div>
+      </div>
+      <div class="text-center md:text-left">
+        <div class="font-serif italic text-5xl md:text-7xl silver-text">100%</div>
+        <div class="label mt-4">GARANTIA ESCRITA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="prova" class="relative z-10 py-24 md:py-40" style="background: rgba(255,255,255,0.01);">
+  <div class="container-fluid">
+
+    <div class="text-center mb-20 md:mb-32">
+      <div class="label mb-6">03 · CASOS</div>
+      <h2 class="h-section text-white">
+        O que disseram<br/><span class="silver-text">depois de assinar.</span>
+      </h2>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-12 md:gap-20 max-w-6xl mx-auto">
+
+      <div class="border-l border-white/15 pl-8 md:pl-16">
+        <p class="testimonial-quote text-white/90 mb-10">
+          "Saí de oito mil para oitenta e sete mil em sessenta dias. Não troquei produto nem aumentei tráfego. Só troquei o site."
+        </p>
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full grayscale-img bg-gradient-to-br from-white/40 to-white/10 border border-white/20"></div>
+          <div>
+            <div class="font-mono text-[11px] uppercase tracking-wider text-white">MARINA ANDRADE</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">FOUNDER · MÉTODO M.A</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-l border-white/15 pl-8 md:pl-16">
+        <p class="testimonial-quote text-white/90 mb-10">
+          "Achei que era marketing. Recebi o site no dia treze, faturei mais no primeiro mês do que no semestre inteiro do meu site antigo."
+        </p>
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full grayscale-img bg-gradient-to-br from-white/30 to-white/5 border border-white/20"></div>
+          <div>
+            <div class="font-mono text-[11px] uppercase tracking-wider text-white">RAFAEL TAVARES</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">CEO · BUILDR SAAS</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-l border-white/15 pl-8 md:pl-16">
+        <p class="testimonial-quote text-white/90 mb-10">
+          "O curso me deu coragem de cobrar quinze mil em vez de mil e quinhentos. Mesma entrega, dez vezes o preço, zero objeção do cliente."
+        </p>
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full grayscale-img bg-gradient-to-br from-white/35 to-white/10 border border-white/20"></div>
+          <div>
+            <div class="font-mono text-[11px] uppercase tracking-wider text-white">BRUNO COSTA</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">DESIGNER · INDEPENDENTE</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-l border-white/15 pl-8 md:pl-16">
+        <p class="testimonial-quote text-white/90 mb-10">
+          "Eu já tinha tentado tudo. Wix, agência, Fiverr. Esses caras entendem o jogo de outra forma. Não é design. É engenharia de desejo."
+        </p>
+        <div class="flex items-center gap-4">
+          <div class="w-14 h-14 rounded-full grayscale-img bg-gradient-to-br from-white/40 to-white/15 border border-white/20"></div>
+          <div>
+            <div class="font-mono text-[11px] uppercase tracking-wider text-white">LARISSA PEREIRA</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">COACH · ALTA PERFORMANCE</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE OFFER ============ -->
+<section class="relative z-10 py-24 md:py-40">
+  <div class="container-fluid max-w-5xl">
+
+    <div class="text-center mb-16">
+      <div class="label mb-6">04 · OFERTA</div>
+      <h2 class="h-section text-white">
+        Tudo o que entra<br/>na <span class="silver-text">segunda via.</span>
+      </h2>
+    </div>
+
+    <div class="glass rounded-3xl p-8 md:p-16">
+
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="space-y-6">
+          <div>
+            <div class="label mb-2">INCLUSO</div>
+            <div class="font-serif italic text-2xl text-white">Site completo · até 8 páginas</div>
+          </div>
+          <div>
+            <div class="label mb-2">INCLUSO</div>
+            <div class="font-serif italic text-2xl text-white">Copy estratégica · AIDA + PAS</div>
+          </div>
+          <div>
+            <div class="label mb-2">INCLUSO</div>
+            <div class="font-serif italic text-2xl text-white">Design generativo · stack completa</div>
+          </div>
+          <div>
+            <div class="label mb-2">INCLUSO</div>
+            <div class="font-serif italic text-2xl text-white">Integrações · WhatsApp · CRM · Pixel</div>
+          </div>
+        </div>
+        <div class="space-y-6">
+          <div>
+            <div class="label mb-2">BÔNUS · 01</div>
+            <div class="font-serif italic text-2xl text-white">Sessão estratégica 1:1 · 60min</div>
+          </div>
+          <div>
+            <div class="label mb-2">BÔNUS · 02</div>
+            <div class="font-serif italic text-2xl text-white">Hospedagem premium · 90 dias</div>
+          </div>
+          <div>
+            <div class="label mb-2">BÔNUS · 03</div>
+            <div class="font-serif italic text-2xl text-white">Painel IA editorial · 10 dias grátis + créditos</div>
+          </div>
+          <div>
+            <div class="label mb-2">BÔNUS · 04</div>
+            <div class="font-serif italic text-2xl text-white">Garantia · Vende ou refazemos</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider mb-12"></div>
+
+      <div class="text-center">
+        <div class="label mb-4">VALOR DE MERCADO · R$ 14.500</div>
+        <div class="font-serif italic text-7xl md:text-9xl silver-text leading-none mb-2">R$ 4.997</div>
+        <div class="font-mono text-[11px] text-white/40 uppercase tracking-wider mt-4">À VISTA · OU 12X DE R$ 497</div>
+
+        <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20para%20a%20Edi%C3%A7%C3%A3o%2004%20do%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--lg inline-block mt-12">
+          <span class="creepy-cta__eyes">
+            <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+            <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+          </span>
+          <span class="creepy-cta__cover px-12 py-5 font-mono text-[12px] tracking-[0.25em] uppercase font-bold">
+            Aplicar para a Edição 04 →
+          </span>
+        </a>
+
+        <p class="label mt-6">4 VAGAS RESTANTES · ENCERRA EM 02D 14H</p>
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ FINAL CTA ============ -->
+<section class="relative z-10 py-32 md:py-48 border-t border-white/10">
+  <div class="container-fluid max-w-4xl text-center">
+    <div class="label mb-8">P.S. · CARTA DO ESTÚDIO</div>
+    <h2 class="h-section text-white mb-12">
+      Não trabalhamos<br/>com <span class="silver-text">todo mundo.</span>
+    </h2>
+    <div class="text-white/65 font-light text-base md:text-lg leading-relaxed space-y-6 max-w-2xl mx-auto">
+      <p>
+        Aceitamos dez clientes por mês. Não porque queremos parecer exclusivos. É porque cada projeto passa pelas minhas mãos. Eu escrevo cada headline. Eu escolho cada imagem. Eu reviso cada linha de código antes do deploy.
+      </p>
+      <p>
+        Se você quer um site que parece igual aos outros, existe Wix. Existe agência grande. Existe estagiário no Fiverr. Se você quer um site que faz o concorrente perguntar "quem fez isso?", aplique abaixo.
+      </p>
+      <p class="text-white/85">
+        Resposta em 24 horas. Sem script. Sem desconto. Sem pressa.
+      </p>
+    </div>
+
+    <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20agora%20no%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--lg inline-block mt-16">
+      <span class="creepy-cta__eyes">
+        <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+        <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
+      </span>
+      <span class="creepy-cta__cover px-12 py-5 font-mono text-[12px] tracking-[0.25em] uppercase font-bold">
+        Aplicar agora →
+      </span>
+    </a>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative z-10 border-t border-white/10 py-16">
+  <div class="container-fluid">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
+      <div>
+        <div class="font-mono text-[12px] tracking-[0.3em] uppercase text-white">ORACLEWISE<span class="text-white/40">/STUDIO</span></div>
+        <div class="font-mono text-[10px] tracking-[0.2em] uppercase text-white/40 mt-3">EST. 2024 · SÃO PAULO · BRASIL</div>
+      </div>
+      <div class="flex flex-wrap gap-x-8 gap-y-3">
+        <a href="#" class="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white">Instagram</a>
+        <a href="#" class="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white">LinkedIn</a>
+        <a href="#" class="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white">Termos</a>
+        <a href="#" class="font-mono text-[10px] tracking-[0.2em] uppercase text-white/50 hover:text-white">Privacidade</a>
+      </div>
+    </div>
+    <div class="divider mt-12 mb-6"></div>
+    <p class="font-mono text-[9px] tracking-[0.2em] uppercase text-white/30">© 2026 ORACLEWISE STUDIO · TODOS OS DIREITOS RESERVADOS</p>
+  </div>
+</footer>
+
+<script>
+  // Countdown
+  const target = new Date();
+  target.setDate(target.getDate() + 2);
+  target.setHours(target.getHours() + 14, 37, 22);
+
+  function pad(n) { return String(Math.max(0, n)).padStart(2, '0'); }
+  function tick() {
+    const diff = target - new Date();
+    if (diff <= 0) return;
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor(diff / 3600000) % 24;
+    const m = Math.floor(diff / 60000) % 60;
+    const s = Math.floor(diff / 1000) % 60;
+    document.getElementById('cd-d').textContent = pad(d);
+    document.getElementById('cd-h').textContent = pad(h);
+    document.getElementById('cd-m').textContent = pad(m);
+    document.getElementById('cd-s').textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // Creepy CTA · eye tracking
+  document.querySelectorAll('.creepy-cta').forEach(btn => {
+    const eyesEl = btn.querySelector('.creepy-cta__eyes');
+    const pupils = btn.querySelectorAll('.creepy-cta__pupil');
+    if (!eyesEl || !pupils.length) return;
+
+    function updateEyes(e) {
+      const t = e.touches ? e.touches[0] : e;
+      const r = eyesEl.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const dx = t.clientX - cx;
+      const dy = t.clientY - cy;
+      const angle = Math.atan2(-dy, dx) + Math.PI / 2;
+      const dist = Math.min(Math.hypot(dx, dy), 200);
+      const x = (Math.sin(angle) * dist) / 150;
+      const y = (Math.cos(angle) * dist) / 100;
+      const tx = -50 + x * 50;
+      const ty = -50 + y * 50;
+      pupils.forEach(p => { p.style.transform = `translate(${tx}%, ${ty}%)`; });
+    }
+    function resetEyes() {
+      pupils.forEach(p => { p.style.transform = 'translate(-50%, -50%)'; });
+    }
+    btn.addEventListener('mousemove', updateEyes);
+    btn.addEventListener('touchmove', updateEyes, { passive: true });
+    btn.addEventListener('mouseleave', resetEyes);
+  });
+
+</script>
+
+</body>
+</html>
