@@ -30,6 +30,22 @@
 </script>
 
 <style>
+  html::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(at 20% 80%, #fff 1px, transparent 0px);
+    background-size: 3px 3px;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.10;
+    mix-blend-mode: plus-lighter;
+    user-select: none;
+  }
+
   :root {
     --obsidian: #080808;
     --silver: #E2E8F0;
@@ -37,6 +53,10 @@
   }
 
   * { -webkit-font-smoothing: antialiased; }
+
+  html {
+    cursor: url('https://rtl4013zxp.easybuilder.com.br/wp-content/uploads/2025/09/cursor-07.svg'), auto;
+  }
 
   html, body {
     background: var(--obsidian);
@@ -66,21 +86,62 @@
   }
 
   .glass {
-    background: rgba(255,255,255,0.02);
+    background: rgba(255,255,255,0.07);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
   }
 
   .silver-btn {
-    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
-    color: #080808;
-    transition: all .4s var(--ease-out-expo);
+    display: inline-block;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: transparent;
+    color: #fff;
+    transition: transform .4s var(--ease-out-expo), box-shadow .4s var(--ease-out-expo);
+  }
+  .silver-btn::before {
+    content: '';
+    position: absolute;
+    left: 50%; top: 50%;
+    width: 300px; height: 300px;
+    margin-left: -150px; margin-top: -150px;
+    background: conic-gradient(from 0deg at 50% 50%,
+      rgba(248, 250, 252, 1) 0deg,
+      rgba(0, 0, 0, 0) 60deg,
+      rgba(0, 0, 0, 0) 300deg,
+      rgba(248, 250, 252, 1) 360deg
+    );
+    animation: glowBtnSpin 2s linear infinite;
+    z-index: -2;
+  }
+  .silver-btn::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    border-radius: inherit;
+    background: rgba(8, 8, 8, 0.92);
+    z-index: -1;
+  }
+  @keyframes glowBtnSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
   }
   .silver-btn:hover {
     transform: translateY(-1px);
-    box-shadow: 0 0 20px rgba(255,255,255,0.15);
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
   }
+  /* Badges (POPULAR, RECOMENDADO, NOVO) — mantém prata original */
+  span.silver-btn {
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    color: #080808;
+    overflow: visible;
+    isolation: auto;
+  }
+  span.silver-btn::before, span.silver-btn::after { display: none; }
+  span.silver-btn:hover { box-shadow: none; }
 
   .nav-link {
     background: rgba(255,255,255,0.05);
@@ -94,8 +155,111 @@
     background: rgba(255,255,255,0.015);
     border: 1px solid rgba(255,255,255,0.06);
     backdrop-filter: blur(24px);
+    /* Dissolve o card no fundo obsidian — sem corte seco */
+    box-shadow: 0 60px 140px 80px #080808;
   }
-  @media (max-width: 768px) { .hero-frame { border-radius: 2rem; } }
+  /* Mobile hero */
+  @media (max-width: 768px) {
+    .hero-frame {
+      border-radius: 2rem;
+      overflow: hidden;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      backdrop-filter: none;
+      box-shadow: 0 40px 100px 50px #080808;
+    }
+    /* Garante que a imagem desktop nunca apareça no mobile */
+    .hero-bg-full { display: none !important; }
+    .hero-gif-wrapper {
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-gif {
+      display: block;
+      width: 100%;
+      aspect-ratio: 9/14;
+      object-fit: cover;
+    }
+    /* Overlay — headline colada no fundo da foto */
+    .hero-overlay-text {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 1.5rem 1.5rem;
+      z-index: 4;
+      text-align: center;
+      background: linear-gradient(to top,
+        rgba(8,8,8,1)    0%,
+        rgba(8,8,8,0.96) 8%,
+        rgba(8,8,8,0.75) 26%,
+        rgba(8,8,8,0.35) 48%,
+        transparent      68%
+      );
+    }
+    /* Headline mobile */
+    .hero-overlay-text .headline {
+      font-size: clamp(40px, 11vw, 56px);
+      line-height: 1;
+      text-shadow: 0 2px 24px rgba(0,0,0,0.95), 0 4px 48px rgba(0,0,0,0.8);
+    }
+    /* Parágrafo vai abaixo da foto */
+    .hero-overlay-text p { display: none; }
+    /* Sem efeito vidro — separação clara entre foto e peças */
+    .hero-content-glass {
+      position: relative;
+      background: transparent;
+      padding: 3rem 1.5rem 2.5rem;
+    }
+    /* Sombra preta difusa nas peças de metadata */
+    .hero-metadata-item .label,
+    .hero-metadata-item .font-mono {
+      text-shadow: 0 1px 10px rgba(0,0,0,0.95), 0 0 20px rgba(0,0,0,0.7);
+    }
+    /* No mobile, só o parágrafo aparece no content-glass (label e h1 já estão na foto) */
+    .hero-desktop-text { display: none; }
+    /* Parágrafo em destaque abaixo da imagem */
+    .hero-mobile-para { display: block !important; }
+  }
+  /* Desktop hero */
+  @media (min-width: 769px) {
+    .hero-gif-wrapper { display: none; }
+    .hero-overlay-text { display: none; }
+    .hero-desktop-text { display: block; }
+  }
+
+  /* ===== Hero background — imagem cinematográfica full-width (desktop) ===== */
+  .hero-bg-full {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    display: none;
+    z-index: 0;
+  }
+  @media (min-width: 769px) {
+    .hero-frame { overflow: hidden; }
+    .hero-bg-full { display: block; }
+  }
+  .hero-bg-full img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    opacity: 0.82;
+  }
+  /* Overlay — gradiente reforçado para destacar o texto no desktop */
+  /* Gradiente desktop — 4 camadas no HTML, mesmo tratamento do advocacia.html */
+  /* Ensure content floats above background */
+  .hero-gif-wrapper,
+  .hero-content-glass { position: relative; z-index: 1; }
+
+  /* Desktop: elementos exclusivos do mobile ficam ocultos */
+  .hero-mobile-para { display: none; }
 
   .headline {
     font-family: 'DM Serif Display', serif;
@@ -125,6 +289,21 @@
     background: rgba(255,255,255,0.01);
     border: 1px solid rgba(255,255,255,0.10);
     transition: all .6s var(--ease-out-expo);
+  }
+  /* Glass nos cards de preço */
+  #escada .grid > div {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.12) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 8px 32px rgba(0,0,0,0.4);
+    transition: all .6s var(--ease-out-expo);
+  }
+  #escada .grid > div:hover {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: rgba(255,255,255,0.2) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.15), 0 16px 48px rgba(0,0,0,0.5);
+    transform: translateY(-3px);
   }
   .bento:hover {
     background: rgba(255,255,255,0.03);
@@ -181,7 +360,11 @@
 
   .divider { height: 1px; background: rgba(255,255,255,0.08); width: 100%; }
 
-  /* ===== Creepy CTA — silver button with peeking eyes ===== */
+  /* Typography — sem orphans, sem quebras tortas */
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; overflow-wrap: break-word; }
+
+  /* ===== Creepy CTA — glowbox button with peeking eyes ===== */
   .creepy-cta {
     position: relative;
     display: inline-block;
@@ -255,12 +438,12 @@
   }
 
   /* Large variant — wide button: rotate less so it doesn't overflow upward */
-  .creepy-cta--lg .creepy-cta__cover { transform-origin: 2.5em 50%; }
-  .creepy-cta--lg:hover .creepy-cta__cover { transform: rotate(-6deg); }
+  .creepy-cta--lg .creepy-cta__cover { transform-origin: 1.8em 50%; }
+  .creepy-cta--lg:hover .creepy-cta__cover { transform: rotate(-11deg); }
   .creepy-cta--lg .creepy-cta__eyes {
     font-size: 18px;
     right: 2.2em;
-    bottom: 0.65em;
+    bottom: 0.3em;
     gap: 0.55em;
   }
   .creepy-cta:active .creepy-cta__cover {
@@ -271,6 +454,14 @@
     0%, 92%, 100% { animation-timing-function: cubic-bezier(0.32, 0, 0.67, 0); height: 0.9em; }
     96% { animation-timing-function: cubic-bezier(0.33, 1, 0.68, 1); height: 0; }
   }
+  /* Estado ativo no clique — espelha o hover para mobile */
+  .creepy-cta--active .creepy-cta__cover {
+    transform: rotate(-12deg);
+    box-shadow: 0 0 25px rgba(255,255,255,0.18), 0 0 0 1px rgba(0,0,0,0.08) inset;
+    transition-timing-function: cubic-bezier(0.65, 0, 0.35, 1.65);
+  }
+  .creepy-cta--lg.creepy-cta--active .creepy-cta__cover { transform: rotate(-11deg); }
+  .creepy-cta--sm.creepy-cta--active .creepy-cta__cover { transform: rotate(-22deg); }
 
   .registry-item { transition: all .5s var(--ease-out-expo); }
   .registry-item:hover { transform: translateX(4px); }
@@ -278,6 +469,70 @@
   .registry-item:hover .reg-avatar { transform: scale(1.1); }
   .reg-avatar { transition: transform .5s var(--ease-out-expo); }
   .reg-name { color: rgba(255,255,255,0.6); transition: color .4s var(--ease-out-expo); }
+
+  /* ===== SVG ICON LOOP ANIMATIONS ===== */
+  @keyframes svg-data-flow {
+    0%   { stroke-dashoffset: 12; opacity: 0.3; }
+    50%  { stroke-dashoffset: 0;  opacity: 1;   }
+    100% { stroke-dashoffset: 12; opacity: 0.3; }
+  }
+  @keyframes svg-arrow-drop {
+    0%, 100% { transform: translateY(0);   }
+    50%      { transform: translateY(3px); }
+  }
+  @keyframes svg-pulse-ring {
+    0%, 100% { transform: scale(1);   opacity: 0.45; }
+    50%      { transform: scale(1.3); opacity: 0.9;  }
+  }
+  @keyframes svg-blink {
+    0%, 40%, 100% { transform: scaleY(1);   }
+    50%           { transform: scaleY(0.3); }
+  }
+  @keyframes svg-node-glow {
+    0%, 100% { opacity: 0.45; }
+    50%      { opacity: 1;    }
+  }
+  @keyframes svg-draw-check {
+    0%        { stroke-dashoffset: 20; opacity: 0.3; }
+    20%       { opacity: 1; }
+    65%       { stroke-dashoffset: 0;  opacity: 1;   }
+    85%, 100% { stroke-dashoffset: 0;  opacity: 0.3; }
+  }
+
+  /* 01 — VELOCIDADE · linha interna do funil se desenha */
+  #icon-speed path:nth-of-type(2) {
+    stroke-dasharray: 12;
+    stroke-dashoffset: 12;
+    animation: svg-data-flow 2s ease-in-out infinite;
+  }
+
+  /* 02 — CONVERSÃO · seta cai, círculo pulsa */
+  #icon-conversion path:nth-of-type(2),
+  #icon-conversion path:nth-of-type(3) {
+    animation: svg-arrow-drop 2.4s ease-in-out infinite;
+  }
+  #icon-conversion circle:nth-of-type(1) {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: svg-pulse-ring 2.4s ease-in-out infinite;
+  }
+
+  /* 03 — DESIGN-IA · pupila pisca, nós pulsam defasados */
+  #icon-design circle:nth-of-type(1) {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: svg-blink 3.5s ease-in-out infinite;
+  }
+  #icon-design circle:nth-of-type(2) { animation: svg-node-glow 3s 0s   ease-in-out infinite; }
+  #icon-design circle:nth-of-type(3) { animation: svg-node-glow 3s 0.6s ease-in-out infinite; }
+  #icon-design circle:nth-of-type(4) { animation: svg-node-glow 3s 1.2s ease-in-out infinite; }
+
+  /* 04 — SUPORTE · checkmark se desenha */
+  #icon-support path:nth-of-type(2) {
+    stroke-dasharray: 20;
+    stroke-dashoffset: 20;
+    animation: svg-draw-check 2.8s ease-in-out infinite;
+  }
 </style>
 </head>
 <body class="relative">
@@ -291,44 +546,125 @@
 
     <nav class="hidden md:flex items-center gap-2">
       <a href="#metodo" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Método</a>
-      <a href="#prova" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Casos</a>
+      <a href="#escada" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Escada</a>
+      <a href="#verticais" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Verticais</a>
+      <a href="#matematica" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Matemática</a>
       <a href="#curso" class="nav-link rounded-full px-5 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase text-white/80">Curso</a>
       <a href="#aplicar" class="silver-btn rounded-full px-6 py-2.5 font-mono text-[11px] tracking-[0.2em] uppercase font-semibold ml-2">Aplicar</a>
     </nav>
 
-    <button class="md:hidden font-mono text-[11px] tracking-[0.3em] uppercase text-white/80">MENU</button>
+    <button id="mobile-menu-btn" onclick="toggleMobileNav()" class="md:hidden font-mono text-[11px] tracking-[0.3em] uppercase text-white/80">MENU</button>
   </div>
 </header>
+
+<!-- ============ MOBILE NAV DRAWER ============ -->
+<div id="mobile-nav" class="fixed inset-0 z-10 flex-col pt-28 px-8 pb-8 gap-3 hidden" style="background: rgba(8,8,8,0.97); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);">
+  <a href="#metodo" onclick="closeMobileNav()" class="nav-link rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase text-white/80 text-center block">Método</a>
+  <a href="#escada" onclick="closeMobileNav()" class="nav-link rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase text-white/80 text-center block">Escada</a>
+  <a href="#verticais" onclick="closeMobileNav()" class="nav-link rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase text-white/80 text-center block">Verticais</a>
+  <a href="#matematica" onclick="closeMobileNav()" class="nav-link rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase text-white/80 text-center block">Matemática</a>
+  <a href="#curso" onclick="closeMobileNav()" class="nav-link rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase text-white/80 text-center block">Curso</a>
+  <a href="#aplicar" onclick="closeMobileNav()" class="silver-btn rounded-full px-5 py-4 font-mono text-[13px] tracking-[0.2em] uppercase font-semibold text-center block mt-4">Aplicar agora</a>
+</div>
 
 <!-- ============ HERO ============ -->
 <section class="relative z-10 pt-16 md:pt-28 pb-20 md:pb-32">
   <div class="container-fluid">
-    <div class="hero-frame px-6 md:px-16 py-16 md:py-28 text-center relative">
+    <div class="hero-frame px-0 md:px-16 py-0 md:py-28 text-center relative">
 
-      <div class="slide-up d1 mb-10">
-        <span class="label">EDIÇÃO 04 · ABERTA POR 72 HORAS</span>
+      <!-- Imagem cinematográfica full-width (desktop) -->
+      <div class="hero-bg-full" aria-hidden="true">
+        <img src="hero_desktop_v2_0.jpeg" alt="" loading="eager" />
+        <!-- Camada 1: radial central — texto flutua sobre o fundo -->
+        <div class="absolute inset-0" style="background: radial-gradient(ellipse 55% 70% at 50% 52%, rgba(8,8,8,0.80) 0%, rgba(8,8,8,0.48) 42%, rgba(8,8,8,0.06) 100%);"></div>
+        <!-- Camada 2: fade lateral esquerdo e direito -->
+        <div class="absolute inset-0" style="background: linear-gradient(90deg, rgba(8,8,8,0.60) 0%, transparent 28%, transparent 72%, rgba(8,8,8,0.60) 100%);"></div>
+        <!-- Camada 3: fade inferior -->
+        <div class="absolute bottom-0 inset-x-0 h-48" style="background: linear-gradient(0deg, rgba(8,8,8,1) 0%, rgba(8,8,8,0.55) 55%, transparent 100%);"></div>
+        <!-- Camada 4: fade superior (atrás do nav) -->
+        <div class="absolute top-0 inset-x-0 h-32" style="background: linear-gradient(180deg, rgba(8,8,8,0.60) 0%, transparent 100%);"></div>
       </div>
 
-      <h1 class="headline slide-up d2 text-white">
-        Sites de elite.<br/>
-        <span class="silver-text">Construídos em 14 dias.</span>
-      </h1>
+      <!-- Imagem hero + texto sobrepostos (mobile) -->
+      <div class="hero-gif-wrapper">
+        <img src="hero_mobile_v2_0.jpeg"
+             alt="OracleWise Studio em ação"
+             class="hero-gif"
+             loading="eager" />
+        <!-- Texto sobre o GIF no mobile -->
+        <div class="hero-overlay-text">
+          <!-- Ícones sociais mobile -->
+          <div class="flex items-center justify-center gap-2 mb-4 slide-up d1">
+            <a href="#" aria-label="Instagram" class="w-8 h-8 rounded-full glass flex items-center justify-center text-white/60 hover:text-white transition-colors">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" aria-label="LinkedIn" class="w-8 h-8 rounded-full glass flex items-center justify-center text-white/60 hover:text-white transition-colors">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="https://wa.me/557199795258?text=Ol%C3%A1!%20Vim%20do%20site%20do%20OracleWise%20Studio." target="_blank" rel="noopener" aria-label="WhatsApp" class="w-8 h-8 rounded-full glass flex items-center justify-center text-white/60 hover:text-white transition-colors">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            </a>
+          </div>
+          <div class="slide-up d2 mb-4">
+            <span class="label">EDIÇÃO 04 · ABERTA POR 72 HORAS</span>
+          </div>
+          <h1 class="headline slide-up d3 text-white">
+            Sites de elite.<br/>
+            <span class="silver-text">Em até 14 dias.</span>
+          </h1>
+          <p class="slide-up d3 mt-10 max-w-2xl mx-auto text-white/60 text-base md:text-lg leading-relaxed font-light">
+            Duas vias. Aprende o ofício no estúdio fechado e faz você mesmo. Ou a gente faz por você em até catorze dias. O resultado é o mesmo. O tempo não é.
+          </p>
+        </div>
+      </div>
 
-      <p class="slide-up d3 mt-10 max-w-2xl mx-auto text-white/60 text-base md:text-lg leading-relaxed font-light">
-        Duas vias para chegar lá. Aprenda o ofício no estúdio fechado, ou deixe que façamos por você em quatorze dias. O destino é o mesmo. A velocidade muda.
+      <!-- Área glass: metadata + form (mobile) / tudo junto (desktop) -->
+      <div class="hero-content-glass">
+
+      <!-- Texto desktop (hidden no mobile) -->
+      <div class="hero-desktop-text">
+
+        <!-- Ícones sociais -->
+        <div class="flex items-center justify-center gap-3 mb-10 slide-up d1">
+          <a href="#" aria-label="Instagram" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white/55 hover:text-white transition-colors">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" aria-label="LinkedIn" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white/55 hover:text-white transition-colors">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://wa.me/557199795258?text=Ol%C3%A1!%20Vim%20do%20site%20do%20OracleWise%20Studio." target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 rounded-full glass flex items-center justify-center text-white/55 hover:text-white transition-colors">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+          </a>
+        </div>
+
+        <div class="slide-up d2 mb-10">
+          <span class="label">EDIÇÃO 04 · ABERTA POR 72 HORAS</span>
+        </div>
+        <h1 class="headline slide-up d3 text-white">
+          Sites de elite.<br/>
+          <span class="silver-text">Em até 14 dias.</span>
+        </h1>
+        <p class="slide-up d4 mt-10 max-w-2xl mx-auto text-white/60 text-base md:text-lg leading-relaxed font-light">
+          Duas vias. Aprende o ofício no estúdio fechado e faz você mesmo. Ou a gente faz por você em até catorze dias. O resultado é o mesmo. O tempo não é.
+        </p>
+      </div>
+
+      <!-- Parágrafo mobile (label e h1 ficam na foto acima) -->
+      <p class="hero-mobile-para slide-up d3 mb-6 max-w-2xl mx-auto text-white/60 text-base leading-relaxed font-light">
+        Duas vias para chegar lá. Aprenda o ofício no estúdio fechado, ou deixe que façamos por você em até quatorze dias. O destino é o mesmo. A velocidade muda.
       </p>
 
       <!-- Metadata bar -->
       <div class="slide-up d4 mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-4 max-w-4xl mx-auto pt-10 border-t border-white/10">
-        <div class="text-left md:text-center">
+        <div class="hero-metadata-item text-left md:text-center">
           <div class="label mb-2">EST. / FUNDADO</div>
           <div class="font-mono text-sm text-white">2024 · SÃO PAULO</div>
         </div>
-        <div class="text-left md:text-center">
+        <div class="hero-metadata-item text-left md:text-center">
           <div class="label mb-2">DISCIPLINA</div>
           <div class="font-mono text-sm text-white">DESIGN-FIRST WEB STUDIO</div>
         </div>
-        <div class="text-left md:text-center">
+        <div class="hero-metadata-item text-left md:text-center">
           <div class="label mb-2">CAPACIDADE</div>
           <div class="font-mono text-sm text-white">10 PROJETOS / MÊS</div>
         </div>
@@ -338,13 +674,14 @@
       <div id="aplicar" class="slide-up d5 mt-16 max-w-2xl mx-auto">
         <div class="glass rounded-2xl p-2 flex flex-col sm:flex-row gap-2">
           <input type="email" placeholder="SEU.EMAIL@EMPRESA.COM" class="input-clean px-4 py-4" />
-          <button class="silver-btn rounded-xl px-8 py-4 font-mono text-[11px] tracking-[0.25em] uppercase font-bold whitespace-nowrap">
+          <button class="silver-btn rounded-xl px-8 py-4 font-mono text-[11px] tracking-[0.25em] uppercase font-bold whitespace-nowrap" style="backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);">
             Aplicar →
           </button>
         </div>
         <p class="label mt-4">RESPOSTA EM ATÉ 24H · SEM SCRIPTS DE VENDAS</p>
       </div>
 
+      </div><!-- /hero-content-glass -->
     </div>
   </div>
 </section>
@@ -375,7 +712,7 @@
       </div>
     </div>
     <p class="mt-12 max-w-xl mx-auto text-white/50 text-sm font-light leading-relaxed">
-      Quatro vagas restantes nesta edição. Quando fecharem, fecharam. Não abrimos exceções, não negociamos prazo.
+      Quatro vagas ainda abertas. Quando fechar, fechou. Sem exceção, sem negociação de prazo.
     </p>
   </div>
 </section>
@@ -405,6 +742,12 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
 
       <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="mb-6">
+          <svg id="icon-speed" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7 8H25L17 16L25 24H7L15 16L7 8Z" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 11L16 15L20 19" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="label mb-8">01 / VELOCIDADE</div>
         <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">14 dias.</h3>
         <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
@@ -413,6 +756,14 @@
       </div>
 
       <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="mb-6">
+          <svg id="icon-conversion" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 7H24L18 21H14L8 7Z" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M16 4V14" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round"/>
+            <path d="M13 11L16 14L19 11" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="16" cy="24" r="2.5" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+          </svg>
+        </div>
         <div class="label mb-8">02 / CONVERSÃO</div>
         <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">Vende ou refazemos.</h3>
         <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
@@ -421,6 +772,18 @@
       </div>
 
       <div class="bento p-8 md:p-12 border-r border-white/10">
+        <div class="mb-6">
+          <svg id="icon-design" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 16C4 16 10 8 16 8C22 8 28 16 28 16C28 16 22 24 16 24C10 24 4 16 4 16Z" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linejoin="round"/>
+            <circle cx="16" cy="16" r="4" stroke="rgba(255,255,255,0.7)" stroke-width="1"/>
+            <path d="M6 7L12.5 13.5" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round"/>
+            <path d="M26 7L19.5 13.5" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round"/>
+            <path d="M16 28L16 20" stroke="rgba(255,255,255,0.45)" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="6" cy="7" r="2" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+            <circle cx="26" cy="7" r="2" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+            <circle cx="16" cy="28" r="2" stroke="rgba(255,255,255,0.45)" stroke-width="1"/>
+          </svg>
+        </div>
         <div class="label mb-8">03 / DESIGN-IA</div>
         <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">Stack proprietária.</h3>
         <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
@@ -429,6 +792,12 @@
       </div>
 
       <div class="bento p-8 md:p-12">
+        <div class="mb-6">
+          <svg id="icon-support" width="40" height="40" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 7C6 7 6 4 16 4C26 4 26 7 26 7L26 16C26 24 16 28 16 28C16 28 6 24 6 16L6 7Z" stroke="rgba(255,255,255,0.7)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 16L15 19L21 13" stroke="rgba(255,255,255,0.7)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
         <div class="label mb-8">04 / SUPORTE</div>
         <h3 class="font-serif italic text-3xl md:text-4xl text-white mb-6 leading-none">90 dias.</h3>
         <p class="font-mono text-[12px] text-white/55 leading-relaxed uppercase tracking-wider">
@@ -441,7 +810,7 @@
 </section>
 
 <!-- ============ ESCADA DE VALOR · HORIZONTAL ============ -->
-<section id="escada" class="relative z-10 py-24 md:py-40">
+<section id="escada" class="relative z-10 py-24 md:py-40" style="background: radial-gradient(ellipse 90% 60% at 50% 55%, rgba(127,250,50,0.05) 0%, transparent 70%)">
   <div class="container-fluid">
 
     <div class="text-center mb-20 md:mb-28 max-w-3xl mx-auto">
@@ -536,7 +905,7 @@
         <div class="label mb-6">T4 · COMPLETA</div>
         <h3 class="font-serif italic text-3xl md:text-4xl text-white leading-none mb-4">Funil inteiro.</h3>
         <p class="text-white/55 font-light text-sm leading-relaxed mb-6">
-          Oito páginas, funil Hook-Story-Offer escrito à mão, noventa dias de ajustes. O pacote que trocou oito por oitenta e sete.
+          Oito páginas, funil Hook-Story-Offer escrito à mão, noventa dias de ajustes. O mesmo pacote que levou uma cliente de R$8k para R$87k em sessenta dias.
         </p>
         <div class="space-y-2 mb-8 flex-1">
           <div class="font-mono text-[10px] uppercase tracking-wider text-white/60">→ Tudo da T3</div>
@@ -572,7 +941,7 @@
       </p>
     </div>
 
-    <div class="grid lg:grid-cols-3 gap-6">
+    <div class="grid md:grid-cols-2 gap-6">
 
       <!-- VERTICAL · ADVOCACIA -->
       <div class="bento rounded-3xl p-8 md:p-10 flex flex-col">
@@ -581,14 +950,15 @@
           Consulta<br/><span class="silver-text">na hora.</span>
         </h3>
         <p class="text-white/60 font-light text-base leading-relaxed mb-8">
-          O cliente entra, preenche CPF ou CNPJ, e o painel devolve tudo em segundos. Processos, Serasa, quadro societário. O lead chega já pré-qualificado e o seu tempo volta a valer hora cheia.
+          O cliente entra, preenche CPF ou CNPJ, e o painel devolve tudo em segundos. Processos em todos os tribunais, protestos, PEP, vínculos societários. O lead chega pré-qualificado, o due diligence já veio junto.
         </p>
         <div class="space-y-3 mb-10 flex-1">
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Consulta CNPJ · quadro societário</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Consulta CPF · restrições</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Processos públicos integrados</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Painel do escritório</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Funil T4 completo</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Consulta CPF · dados + indicadores de risco</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Processos · TJ, TRT, TRF, STJ, STF</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Compliance AML · PEP lista restritiva</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Protesto nacional + certidões</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Combos: Triagem R$ 24,90 · Processual R$ 44,90 · Due Diligence R$ 119,90</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Funil T4 · planos de R$ 397 a R$ 1.497/mês</div>
         </div>
         <div class="divider mb-6"></div>
         <div class="flex items-end justify-between">
@@ -597,7 +967,7 @@
             <div class="font-serif italic text-4xl silver-text">R$ 9.997</div>
             <div class="font-mono text-[10px] text-white/40 mt-1">12X DE R$ 999</div>
           </div>
-          <a href="https://wa.me/5511989581709?text=Quero%20a%20vertical%20Advocacia%20do%20OracleWise" target="_blank" rel="noopener" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Aplicar →</a>
+          <a href="advocacia.html" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Ver planos →</a>
         </div>
       </div>
 
@@ -608,14 +978,15 @@
           Histórico<br/><span class="silver-text">da placa ao gravame.</span>
         </h3>
         <p class="text-white/60 font-light text-base leading-relaxed mb-8">
-          Pro seu cliente que está na dúvida entre o seu carro e o do cara da esquina: o seu site entrega a placa limpa em trinta segundos. Leilão, sinistro, débito, gravame, chassi. A venda decide ali.
+          O cliente está na dúvida entre o seu carro e o do cara da esquina: o seu site entrega a placa limpa em trinta segundos. FIPE atualizada, sinistro, leilão, débitos, chassi e histórico completo. A venda se decide ali.
         </p>
         <div class="space-y-3 mb-10 flex-1">
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Histórico completo por placa</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Leilão + sinistro + gravame</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Débitos · IPVA · multa</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Catálogo com filtro inteligente</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Funil T4 completo</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ FIPE atualizada via placa · cotação instantânea</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Histórico: sinistro, leilão, gravame, RENAJUD</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Base nacional · chassi + RENAVAM + motor</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Débitos: IPVA, multas, licenciamento</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Combos: FIPE R$ 2,90 · Histórico R$ 9,90 · Blindado R$ 24,90</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ CNH por CPF R$ 14,90 · Catálogo com filtro inteligente</div>
         </div>
         <div class="divider mb-6"></div>
         <div class="flex items-end justify-between">
@@ -624,7 +995,7 @@
             <div class="font-serif italic text-4xl silver-text">R$ 10.997</div>
             <div class="font-mono text-[10px] text-white/40 mt-1">12X DE R$ 1.099</div>
           </div>
-          <a href="https://wa.me/5511989581709?text=Quero%20a%20vertical%20Auto%20do%20OracleWise" target="_blank" rel="noopener" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Aplicar →</a>
+          <a href="auto.html" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Ver planos →</a>
         </div>
       </div>
 
@@ -635,14 +1006,14 @@
           Agenda<br/><span class="silver-text">que cobra antes.</span>
         </h3>
         <p class="text-white/60 font-light text-base leading-relaxed mb-8">
-          Clínica, salão, consultório, estética, barbearia. O cliente marca, paga o sinal no PIX, e ainda recebe lembrete no WhatsApp no dia. Adeus "deu plantão e esqueci".
+          Clínica, salão, consultório, estética, barbearia. O cliente marca, paga o sinal no PIX, recebe lembrete no WhatsApp e tem o CPF validado na hora. Profissional CRM/CRO conferido. Adeus furo. Adeus cadastro fake.
         </p>
         <div class="space-y-3 mb-10 flex-1">
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Agenda online multi-profissional</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ PIX + cartão antes do horário</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Lembrete WhatsApp automático</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Bloqueio anti no-show</div>
-          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Funil T4 completo</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Agenda multi-profissional · PIX + cartão antes</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Lembrete WhatsApp · bloqueio anti no-show</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Validação CRM/CRO · médico ou dentista real</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ SMS R$ 0,30 · URA R$ 0,99 · CPF R$ 1,50 · CRM/CRO R$ 2,90</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/70">→ Funil T4 · planos de R$ 297 a R$ 897/mês</div>
         </div>
         <div class="divider mb-6"></div>
         <div class="flex items-end justify-between">
@@ -651,7 +1022,38 @@
             <div class="font-serif italic text-4xl silver-text">R$ 8.997</div>
             <div class="font-mono text-[10px] text-white/40 mt-1">12X DE R$ 899</div>
           </div>
-          <a href="https://wa.me/5511989581709?text=Quero%20a%20vertical%20Agendamento%20do%20OracleWise" target="_blank" rel="noopener" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Aplicar →</a>
+          <a href="agendamento.html" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Ver planos →</a>
+        </div>
+      </div>
+
+      <!-- VERTICAL · IMOBILIÁRIA -->
+      <div class="rounded-3xl p-8 md:p-10 flex flex-col" style="background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)); border: 1px solid rgba(255,255,255,0.18);">
+        <div class="flex items-center justify-between mb-8">
+          <div class="label">V4 · IMOBILIÁRIA</div>
+          <span class="silver-btn rounded-full px-3 py-1 font-mono text-[8px] tracking-[0.25em] uppercase font-bold">NOVO</span>
+        </div>
+        <h3 class="font-serif italic text-4xl md:text-5xl text-white leading-none mb-6">
+          Ficha limpa<br/><span class="silver-text">antes da chave.</span>
+        </h3>
+        <p class="text-white/70 font-light text-base leading-relaxed mb-8">
+          Imobiliárias, administradoras e construtoras. O candidato preenche o CPF. Em segundos: SPC, protestos, vínculo empregatício confirmado, processos judiciais. Você aprova quem paga. Um despejo evitado paga o sistema por quatro anos.
+        </p>
+        <div class="space-y-3 mb-10 flex-1">
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ SPC Terceiros PF · análise de crédito completa</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ Protesto nacional + certidão negativa PF</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ Vínculo empregatício · renda ativa confirmada</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ Processos judiciais + busca por raio de CEP</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ Combos: Pré-Análise R$ 24,90 · Padrão R$ 69,90 · Premium R$ 149,90</div>
+          <div class="font-mono text-[11px] uppercase tracking-wider text-white/80">→ Funil T4 · planos de R$ 497 a R$ 1.797/mês</div>
+        </div>
+        <div class="divider mb-6"></div>
+        <div class="flex items-end justify-between">
+          <div>
+            <div class="label mb-2">INVESTIMENTO</div>
+            <div class="font-serif italic text-4xl silver-text">R$ 10.997</div>
+            <div class="font-mono text-[10px] text-white/40 mt-1">12X DE R$ 1.099</div>
+          </div>
+          <a href="imobiliaria.html" class="nav-link rounded-xl px-5 py-3 font-mono text-[10px] tracking-[0.2em] uppercase font-bold text-white">Ver planos →</a>
         </div>
       </div>
 
@@ -669,12 +1071,102 @@
   </div>
 </section>
 
+<!-- ============ REFRAME · STACK QUE PARA DE CHEGAR ============ -->
+<section id="matematica" class="relative z-10 py-24 md:py-40">
+  <div class="container-fluid max-w-6xl">
+
+    <div class="text-center mb-20 md:mb-28 max-w-3xl mx-auto">
+      <div class="label mb-6">04 · MATEMÁTICA</div>
+      <h2 class="h-section text-white">
+        Quatro faturas<br/><span class="silver-text">param de chegar.</span>
+      </h2>
+      <p class="mt-10 text-white/55 font-light text-base md:text-lg leading-relaxed">
+        Você não tá comprando um site. Tá demitindo o designer do Instagram, o social media, o cara que cuida do WhatsApp, a planilha do Excel e o consultor que nunca atende. Tudo numa conta só. Uma vez.
+      </p>
+    </div>
+
+    <div class="glass rounded-3xl p-8 md:p-16 mb-16">
+      <div class="label mb-8">HOJE VOCÊ PAGA, TODO MÊS</div>
+      <div class="space-y-0">
+
+        <div class="grid grid-cols-12 gap-4 items-baseline py-5 border-b border-white/10">
+          <div class="col-span-12 md:col-span-6">
+            <div class="font-serif italic text-xl md:text-2xl text-white">Designer freelancer</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">Criativos, posts, landing sem fim</div>
+          </div>
+          <div class="col-span-6 md:col-span-3 font-mono text-[11px] uppercase tracking-wider text-white/55">R$ 1.200 / mês</div>
+          <div class="col-span-6 md:col-span-3 text-right font-serif italic text-2xl text-white">R$ 14.400</div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 items-baseline py-5 border-b border-white/10">
+          <div class="col-span-12 md:col-span-6">
+            <div class="font-serif italic text-xl md:text-2xl text-white">Social media</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">Gestão de redes, conteúdo, stories</div>
+          </div>
+          <div class="col-span-6 md:col-span-3 font-mono text-[11px] uppercase tracking-wider text-white/55">R$ 1.500 / mês</div>
+          <div class="col-span-6 md:col-span-3 text-right font-serif italic text-2xl text-white">R$ 18.000</div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 items-baseline py-5 border-b border-white/10">
+          <div class="col-span-12 md:col-span-6">
+            <div class="font-serif italic text-xl md:text-2xl text-white">Agente de WhatsApp</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">Bot, atendimento, follow-up manual</div>
+          </div>
+          <div class="col-span-6 md:col-span-3 font-mono text-[11px] uppercase tracking-wider text-white/55">R$ 400 / mês</div>
+          <div class="col-span-6 md:col-span-3 text-right font-serif italic text-2xl text-white">R$ 4.800</div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 items-baseline py-5 border-b border-white/10">
+          <div class="col-span-12 md:col-span-6">
+            <div class="font-serif italic text-xl md:text-2xl text-white">CRM + ferramentas</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">Planilha, RD, ActiveCampaign</div>
+          </div>
+          <div class="col-span-6 md:col-span-3 font-mono text-[11px] uppercase tracking-wider text-white/55">R$ 300 / mês</div>
+          <div class="col-span-6 md:col-span-3 text-right font-serif italic text-2xl text-white">R$ 3.600</div>
+        </div>
+
+        <div class="grid grid-cols-12 gap-4 items-baseline py-5">
+          <div class="col-span-12 md:col-span-6">
+            <div class="font-serif italic text-xl md:text-2xl text-white">Consultor de marketing</div>
+            <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-1">Reunião quinzenal que não resolve nada</div>
+          </div>
+          <div class="col-span-6 md:col-span-3 font-mono text-[11px] uppercase tracking-wider text-white/55">R$ 2.000 / mês</div>
+          <div class="col-span-6 md:col-span-3 text-right font-serif italic text-2xl text-white">R$ 24.000</div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-6 items-center">
+      <div>
+        <div class="label mb-4">TOTAL QUE SAI TODO ANO</div>
+        <div class="font-serif italic text-6xl md:text-8xl text-white/30 leading-none line-through">R$ 64.800</div>
+        <p class="mt-6 text-white/50 font-light text-base leading-relaxed">
+          Quatro contratos. Quatro senhas. Quatro reuniões toda semana. Quatro pessoas que somem quando o resultado não vem.
+        </p>
+      </div>
+      <div class="glass rounded-3xl p-8 md:p-12 text-center">
+        <div class="label mb-4">VOCÊ PAGA UMA VEZ</div>
+        <div class="font-serif italic text-6xl md:text-8xl silver-text leading-none">R$ 1.497</div>
+        <div class="font-mono text-[10px] uppercase tracking-wider text-white/40 mt-4">DEGRAU T0 · OU SOBE A ESCADA</div>
+        <p class="mt-6 text-white/55 font-light text-sm leading-relaxed">
+          Site, copy, design, integrações. Entrega em até 14 dias. Garantia escrita: vende ou refazemos.
+        </p>
+        <a href="#aplicar" class="silver-btn inline-block mt-8 rounded-xl px-8 py-4 font-mono text-[11px] tracking-[0.2em] uppercase font-bold">
+          Começar agora →
+        </a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ============ DUAS VIAS · TIER COMPARISON ============ -->
 <section id="curso" class="relative z-10 py-24 md:py-40">
   <div class="container-fluid">
 
     <div class="text-center mb-20 md:mb-28">
-      <div class="label mb-6">04 · ARQUITETURA</div>
+      <div class="label mb-6">05 · ARQUITETURA</div>
       <h2 class="h-section text-white">
         Antes dos degraus,<br/><span class="silver-text">uma escolha só.</span>
       </h2>
@@ -732,7 +1224,7 @@
 
         <div class="mt-8 pt-6 border-t border-white/5">
           <p class="font-mono text-[10px] uppercase tracking-wider text-white/35 leading-relaxed">
-            Para quem tem mais tempo que dinheiro. Resultado em 30–60 dias.
+            Para quem tem mais tempo que dinheiro. Resultado em 30 a 60 dias.
           </p>
         </div>
       </div>
@@ -750,30 +1242,24 @@
         </div>
 
         <h3 class="font-serif italic text-4xl md:text-6xl text-white leading-none mb-6">
-          Site que vende.<br/><span class="silver-text">Em 14 dias.</span>
+          Estúdio faz<br/><span class="silver-text">por você.</span>
         </h3>
         <p class="text-white/65 font-light text-base leading-relaxed mb-10 max-w-md">
-          Estúdio fechado. Nós escrevemos cada palavra, geramos cada imagem, codamos cada interação. Você acorda no dia quinze com um site que vende.
+          A gente escreve cada palavra, gera cada imagem, coda cada interação. Você escolhe o degrau na escada ali em cima e acorda no dia quinze com o site no ar.
         </p>
 
         <div class="space-y-3 mb-12 flex-1">
           <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> Site completo · até 8 páginas
+            <span class="text-white/40">→</span> Cinco degraus · escolha o seu
           </div>
           <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> Copy estratégica · AIDA + PAS
+            <span class="text-white/40">→</span> Verticais prontas por nicho
           </div>
           <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> Design generativo · stack completa
+            <span class="text-white/40">→</span> Copy, design e código na mesma mão
           </div>
           <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> Integrações · WhatsApp · CRM · Pixel
-          </div>
-          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> 90 dias de suporte direto
-          </div>
-          <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
-            <span class="text-white/40">→</span> Painel IA editorial · 10 dias grátis
+            <span class="text-white/40">→</span> Entrega em 5 a 14 dias
           </div>
           <div class="flex items-center gap-3 font-mono text-[11px] uppercase tracking-wider text-white/80">
             <span class="text-white/40">→</span> Garantia · vende ou refazemos
@@ -784,11 +1270,11 @@
 
         <div class="flex items-end justify-between">
           <div>
-            <div class="label mb-2">INVESTIMENTO</div>
-            <div class="font-serif italic text-5xl silver-text">R$ 4.997</div>
-            <div class="font-mono text-[10px] text-white/40 mt-2">12X DE R$ 497</div>
+            <div class="label mb-2">A PARTIR DE</div>
+            <div class="font-serif italic text-5xl silver-text">R$ 1.497</div>
+            <div class="font-mono text-[10px] text-white/40 mt-2">DEGRAU NA ESCADA ACIMA</div>
           </div>
-          <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20para%20a%20Edi%C3%A7%C3%A3o%2004%20do%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--sm">
+          <a href="https://wa.me/557199795258?text=Ol%C3%A1!%20Vi%20o%20OracleWise%20Studio%20e%20quero%20entrar%20no%20Design%20IA%20Master%2C%20Edi%C3%A7%C3%A3o%2004." target="_blank" rel="noopener" class="creepy-cta creepy-cta--sm">
             <span class="creepy-cta__eyes">
               <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
               <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
@@ -801,7 +1287,7 @@
 
         <div class="mt-8 pt-6 border-t border-white/10">
           <p class="font-mono text-[10px] uppercase tracking-wider text-white/45 leading-relaxed">
-            Para quem tem mais dinheiro que tempo. Resultado em 14 dias. 4 vagas restantes nesta edição.
+            Para quem tem mais dinheiro que tempo. Resultado em 5 a 14 dias. 4 das 10 vagas desta edição ainda restam.
           </p>
         </div>
       </div>
@@ -839,7 +1325,7 @@
   <div class="container-fluid">
 
     <div class="text-center mb-20 md:mb-32">
-      <div class="label mb-6">05 · CASOS</div>
+      <div class="label mb-6">06 · CASOS</div>
       <h2 class="h-section text-white">
         O que disseram<br/><span class="silver-text">depois de assinar.</span>
       </h2>
@@ -903,83 +1389,6 @@
   </div>
 </section>
 
-<!-- ============ THE OFFER ============ -->
-<section class="relative z-10 py-24 md:py-40">
-  <div class="container-fluid max-w-5xl">
-
-    <div class="text-center mb-16">
-      <div class="label mb-6">06 · OFERTA</div>
-      <h2 class="h-section text-white">
-        Tudo o que entra<br/>na <span class="silver-text">segunda via.</span>
-      </h2>
-    </div>
-
-    <div class="glass rounded-3xl p-8 md:p-16">
-
-      <div class="grid md:grid-cols-2 gap-8 mb-12">
-        <div class="space-y-6">
-          <div>
-            <div class="label mb-2">INCLUSO</div>
-            <div class="font-serif italic text-2xl text-white">Site completo · até 8 páginas</div>
-          </div>
-          <div>
-            <div class="label mb-2">INCLUSO</div>
-            <div class="font-serif italic text-2xl text-white">Copy estratégica · AIDA + PAS</div>
-          </div>
-          <div>
-            <div class="label mb-2">INCLUSO</div>
-            <div class="font-serif italic text-2xl text-white">Design generativo · stack completa</div>
-          </div>
-          <div>
-            <div class="label mb-2">INCLUSO</div>
-            <div class="font-serif italic text-2xl text-white">Integrações · WhatsApp · CRM · Pixel</div>
-          </div>
-        </div>
-        <div class="space-y-6">
-          <div>
-            <div class="label mb-2">BÔNUS · 01</div>
-            <div class="font-serif italic text-2xl text-white">Sessão estratégica 1:1 · 60min</div>
-          </div>
-          <div>
-            <div class="label mb-2">BÔNUS · 02</div>
-            <div class="font-serif italic text-2xl text-white">Hospedagem premium · 90 dias</div>
-          </div>
-          <div>
-            <div class="label mb-2">BÔNUS · 03</div>
-            <div class="font-serif italic text-2xl text-white">Painel IA editorial · 10 dias grátis + créditos</div>
-          </div>
-          <div>
-            <div class="label mb-2">BÔNUS · 04</div>
-            <div class="font-serif italic text-2xl text-white">Garantia · Vende ou refazemos</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider mb-12"></div>
-
-      <div class="text-center">
-        <div class="label mb-4">VALOR DE MERCADO · R$ 14.500</div>
-        <div class="font-serif italic text-7xl md:text-9xl silver-text leading-none mb-2">R$ 4.997</div>
-        <div class="font-mono text-[11px] text-white/40 uppercase tracking-wider mt-4">À VISTA · OU 12X DE R$ 497</div>
-
-        <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20para%20a%20Edi%C3%A7%C3%A3o%2004%20do%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--lg inline-block mt-12">
-          <span class="creepy-cta__eyes">
-            <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
-            <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
-          </span>
-          <span class="creepy-cta__cover px-12 py-5 font-mono text-[12px] tracking-[0.25em] uppercase font-bold">
-            Aplicar para a Edição 04 →
-          </span>
-        </a>
-
-        <p class="label mt-6">4 VAGAS RESTANTES · ENCERRA EM 02D 14H</p>
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
 <!-- ============ FINAL CTA ============ -->
 <section class="relative z-10 py-32 md:py-48 border-t border-white/10">
   <div class="container-fluid max-w-4xl text-center">
@@ -999,7 +1408,7 @@
       </p>
     </div>
 
-    <a href="https://wa.me/5511989581709?text=Ol%C3%A1%2C%20quero%20aplicar%20agora%20no%20OracleWise%20Studio" target="_blank" rel="noopener" class="creepy-cta creepy-cta--lg inline-block mt-16">
+    <a href="https://wa.me/557199795258?text=Ol%C3%A1!%20Quero%20aplicar%20para%20um%20projeto%20no%20OracleWise%20Studio.%20Como%20funciona%20o%20pr%C3%B3ximo%20passo%3F" target="_blank" rel="noopener" class="creepy-cta creepy-cta--lg inline-block mt-16">
       <span class="creepy-cta__eyes">
         <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
         <span class="creepy-cta__eye"><span class="creepy-cta__pupil"></span></span>
@@ -1012,7 +1421,7 @@
 </section>
 
 <!-- ============ FOOTER ============ -->
-<footer class="relative z-10 border-t border-white/10 py-16">
+<footer class="relative z-10 border-t border-white/10 py-16" style="box-shadow: 0 -80px 120px 40px #080808;">
   <div class="container-fluid">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
       <div>
@@ -1053,6 +1462,51 @@
   tick();
   setInterval(tick, 1000);
 
+  // Mobile nav toggle
+  function toggleMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const btn = document.getElementById('mobile-menu-btn');
+    const isOpen = nav.classList.contains('flex');
+    if (isOpen) {
+      nav.classList.remove('flex');
+      nav.classList.add('hidden');
+      btn.textContent = 'MENU';
+      document.body.style.overflow = '';
+    } else {
+      nav.classList.remove('hidden');
+      nav.classList.add('flex');
+      btn.textContent = 'FECHAR';
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  function closeMobileNav() {
+    const nav = document.getElementById('mobile-nav');
+    const btn = document.getElementById('mobile-menu-btn');
+    nav.classList.remove('flex');
+    nav.classList.add('hidden');
+    btn.textContent = 'MENU';
+    document.body.style.overflow = '';
+  }
+
+  // Mobile typography — substitui <br> em headings por espaço, deixa text-wrap: balance agir
+  if (window.innerWidth < 768) {
+    document.querySelectorAll('h1 br, h2 br, h3 br, h4 br').forEach(function(br) {
+      br.parentNode.replaceChild(document.createTextNode(' '), br);
+    });
+  }
+
+  // Previne orphans em parágrafos (cross-browser, funciona no Safari)
+  document.querySelectorAll('p').forEach(function(el) {
+    var last = el.lastChild;
+    if (!last || last.nodeType !== 3) return; // só texto puro
+    var t = last.textContent;
+    var i = t.lastIndexOf(' ');
+    if (i < 1) return;
+    var lastWord = t.slice(i + 1).trim();
+    if (!lastWord || lastWord.length < 2) return;
+    last.textContent = t.slice(0, i) + '\u00A0' + lastWord;
+  });
+
   // Creepy CTA · eye tracking
   document.querySelectorAll('.creepy-cta').forEach(btn => {
     const eyesEl = btn.querySelector('.creepy-cta__eyes');
@@ -1082,6 +1536,439 @@
     btn.addEventListener('mouseleave', resetEyes);
   });
 
+  // Creepy CTA · click delay (desktop + mobile)
+  document.querySelectorAll('a.creepy-cta').forEach(function(btn) {
+    btn.addEventListener('click', function(e) {
+      var href = this.getAttribute('href') || '';
+      if (!href || href.startsWith('#')) return;
+      e.preventDefault();
+      var el = this;
+      el.classList.add('creepy-cta--active');
+      var target = el.getAttribute('target');
+      setTimeout(function() {
+        if (target === '_blank') {
+          window.open(href, '_blank', 'noopener');
+        } else {
+          window.location.href = href;
+        }
+      }, 900);
+    });
+  });
+
+</script>
+
+<!-- ============ CHATBOT WIDGET ============ -->
+<style>
+  #ow-chat-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 10000;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    color: #080808;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.15);
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s ease;
+  }
+  #ow-chat-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.7), 0 0 20px rgba(255,255,255,0.1); }
+  #ow-chat-btn .dot {
+    position: absolute;
+    top: 4px; right: 4px;
+    width: 10px; height: 10px;
+    background: #34d399;
+    border-radius: 50%;
+    border: 2px solid #080808;
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+
+  #ow-chat-panel {
+    position: fixed;
+    bottom: 96px;
+    right: 28px;
+    z-index: 10000;
+    width: 360px;
+    /* nunca ultrapassa o topo da tela — 16px de folga no topo + 96px de base */
+    height: min(560px, calc(100dvh - 112px));
+    border-radius: 24px;
+    background: rgba(10,10,10,0.97);
+    border: 1px solid rgba(255,255,255,0.10);
+    backdrop-filter: blur(24px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.8);
+    transform: translateY(16px) scale(0.96);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  }
+  #ow-chat-panel.open { transform: translateY(0) scale(1); opacity: 1; pointer-events: all; }
+  @media(max-width:480px) {
+    #ow-chat-panel {
+      width: calc(100vw - 32px);
+      right: 16px;
+      bottom: 88px;
+      height: min(520px, calc(100dvh - 104px));
+    }
+  }
+
+  .ow-chat-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ow-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; font-weight: 700;
+    color: #080808; flex-shrink: 0;
+  }
+  .ow-chat-messages {
+    flex: 1;
+    min-height: 0;       /* impede o flex-child de crescer além do pai */
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+  }
+  .ow-chat-messages::-webkit-scrollbar { width: 4px; }
+  .ow-chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .ow-chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 2px; }
+
+  .ow-msg {
+    max-width: 85%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    animation: msg-in 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes msg-in { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .ow-msg.bot {
+    align-self: flex-start;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.88);
+    border-bottom-left-radius: 4px;
+  }
+  .ow-msg.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, rgba(248,250,252,0.15) 0%, rgba(148,163,184,0.15) 100%);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+  }
+  .ow-typing {
+    align-self: flex-start;
+    display: flex; align-items: center; gap: 4px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.10);
+    border-radius: 16px; border-bottom-left-radius: 4px;
+  }
+  .ow-typing span {
+    width: 5px; height: 5px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    animation: typing-dot 1.2s ease-in-out infinite;
+  }
+  .ow-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .ow-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typing-dot { 0%,60%,100%{transform:translateY(0);opacity:0.4} 30%{transform:translateY(-4px);opacity:1} }
+
+  .ow-chip-row {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    padding: 0 4px;
+    align-self: flex-start;
+    animation: msg-in 0.3s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  .ow-chip {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+    color: rgba(255,255,255,0.7);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .ow-chip:hover { background: rgba(255,255,255,0.10); color: #fff; border-color: rgba(255,255,255,0.30); }
+
+  .ow-input-row {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap-8: 8px;
+  }
+  #ow-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 8px 12px;
+  }
+  #ow-input::placeholder { color: rgba(255,255,255,0.3); }
+  #ow-send {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #F8FAFC 0%, #94A3B8 100%);
+    color: #080808;
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+  #ow-send:hover { transform: scale(1.1); }
+  #ow-send:disabled { opacity: 0.3; cursor: not-allowed; }
+</style>
+
+<!-- Chat button -->
+<button id="ow-chat-btn" aria-label="Abrir chat" onclick="owToggleChat()">
+  <!-- Oracle eye icon — alinha com o tema OracleWise -->
+  <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 12C3 12 7 5.5 12 5.5S21 12 21 12 17 18.5 12 18.5 3 12 3 12Z"/>
+    <circle cx="12" cy="12" r="3.2"/>
+    <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/>
+  </svg>
+  <span class="dot"></span>
+</button>
+
+<!-- Chat panel -->
+<div id="ow-chat-panel" role="dialog" aria-label="Chat OracleWise">
+  <div class="ow-chat-header">
+    <div class="ow-avatar">
+      <!-- Oracle eye icon -->
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12C3 12 7 5.5 12 5.5S21 12 21 12 17 18.5 12 18.5 3 12 3 12Z"/>
+        <circle cx="12" cy="12" r="3.2"/>
+        <circle cx="12" cy="12" r="1.1" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+    <div>
+      <p style="font-family:'Geist Mono',monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.2em;color:#fff">OracleWise</p>
+      <p style="font-family:'Inter',sans-serif;font-size:11px;color:rgba(255,255,255,0.4);margin-top:2px">Normalmente responde na hora</p>
+    </div>
+    <button onclick="owToggleChat()" style="margin-left:auto;background:transparent;border:none;color:rgba(255,255,255,0.3);cursor:pointer;font-size:18px;line-height:1;padding:4px">&times;</button>
+  </div>
+  <div class="ow-chat-messages" id="ow-msgs"></div>
+  <div class="ow-input-row">
+    <input id="ow-input" placeholder="ESCREVA AQUI..." autocomplete="off" onkeydown="if(event.key==='Enter')owSend()" disabled />
+    <button id="ow-send" onclick="owSend()" disabled>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function() {
+  // ── endpoints ────────────────────────────────────────────────────────────
+  // A chave de API fica APENAS no backend — nunca exposta aqui no HTML.
+  // Backend deve expor POST /api/chat  → { messages, system } → { reply }
+  //                   POST /api/leads → { name, email, phone, ... }
+  const isDev = window.location.hostname === 'localhost' || window.location.protocol === 'file:'
+  const API_LEADS = isDev ? 'http://localhost:3001/api/leads' : 'https://studio.oraclewise.com.br/api/leads'
+  const API_CHAT  = isDev ? 'http://localhost:3001/api/chat'  : 'https://studio.oraclewise.com.br/api/chat'
+
+  // ── system prompt com todo o conhecimento do projeto ────────────────────
+  const SYSTEM = `Você é o assistente virtual da OracleWise Studio — web design studio premium fundado em 2024 em São Paulo. Responda sempre em português brasileiro. Seja direto, técnico e premium. Respostas curtas. Sem firulas.
+
+SOBRE O ESTÚDIO:
+- Constrói sites de elite em até 14 dias
+- Capacidade máxima: 10 projetos/mês (escassez real)
+- Dois caminhos: (1) você aprende no curso Design IA Master, ou (2) a gente faz por você
+- Edição 04 aberta por 72 horas · São Paulo · Est. 2024
+
+SITES FEITOS PARA VOCÊ — ESCADA DE VALOR:
+T0 · SECA — R$ 1.497 (12x R$149): 1 página, 1 CTA, formulário + WhatsApp, hospedagem 90 dias, entrega em 5 dias
+T1 · RASTREADA — R$ 2.497 (12x R$249): T0 + Pixel Meta com CAPI, GA4 com eventos custom, banner LGPD
+T2 · ATENDIDA — R$ 3.497 (12x R$349): T1 + agente IA no WhatsApp treinado no seu negócio, handoff para humano
+T3 · PUBLICÁVEL — R$ 4.997 (12x R$497) [MAIS POPULAR]: T2 + painel ADM próprio, gerador de roteiros e imagens com 1 clique
+T4 · COMPLETA — R$ 7.997 (12x R$799): T3 + 8 páginas, funil Hook-Story-Offer escrito à mão, copy AIDA+PAS, 90 dias de suporte
+
+CASE DE RESULTADO: T4 levou uma cliente de R$8k para R$87k em 60 dias.
+GARANTIA: vende-ou-refazemos em contrato.
+
+VERTICAIS ESPECIALIZADAS (cada uma já inclui T4 completo):
+- Advocacia — R$ 9.997 · consultas: triagem R$24,90, processual R$44,90, due diligence R$119,90 · planos mensais R$397–R$1.497
+- Auto (concessionárias/despachantes) — R$ 10.997 · FIPE R$2,90, histórico R$9,90, laudo blindado R$24,90 · CNH por CPF R$14,90
+- Agendamento (clínicas/salões) — R$ 8.997 · SMS R$0,30, URA R$0,99, CPF R$1,50, CRM/CRO R$2,90 · planos R$297–R$897/mês
+- Imobiliária — R$ 10.997 · pré-análise R$24,90, avaliação R$69,90, premium R$149,90 · planos R$497–R$1.797/mês
+
+CURSO DESIGN IA MASTER (você aprende e aplica):
+- Starter — R$ 497 (12x R$49,70): aprende o método
+- Master (recomendado) — R$ 1.497: acesso vitalício, templates, mentoria em grupo, comunidade fechada
+
+COLETA DE LEAD: Quando o usuário demonstrar interesse real, peça sutilmente nome, e-mail e WhatsApp. Apenas uma vez, no momento certo. Nunca seja insistente.`
+
+  // ── estado ───────────────────────────────────────────────────────────────
+  let isOpen    = false
+  let waiting   = false
+  let started   = false
+  let messages  = []   // histórico multi-turn para a API
+  let sessionId = null // ID da sessão no banco — criado no primeiro POST /api/chat
+
+  // ── integração com form hero ─────────────────────────────────────────────
+  const heroEmail = document.querySelector('input[type="email"]')
+  if (heroEmail) {
+    const applyBtn = heroEmail.closest('.glass')?.querySelector('button')
+    if (applyBtn) {
+      applyBtn.addEventListener('click', () => {
+        const email = heroEmail.value.trim()
+        if (!email) return
+        // salva o lead no banco antes de abrir o chat
+        fetch(API_LEADS, {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ email, source: 'hero_form' }),
+        }).catch(() => {}) // silencia erro — não bloqueia o UX
+        setTimeout(() => owOpen(), 400)
+      })
+    }
+  }
+
+  // ── DOM helpers ──────────────────────────────────────────────────────────
+  function msgBox() { return document.getElementById('ow-msgs') }
+  function inp()    { return document.getElementById('ow-input') }
+  function btn()    { return document.getElementById('ow-send') }
+  function panel()  { return document.getElementById('ow-chat-panel') }
+
+  function owToggleChat() { isOpen ? owClose() : owOpen() }
+  window.owToggleChat = owToggleChat
+
+  function owOpen() {
+    isOpen = true
+    panel().classList.add('open')
+    if (!started) { started = true; setTimeout(startChat, 300) }
+    else setTimeout(() => inp().focus(), 350)
+  }
+
+  function owClose() {
+    isOpen = false
+    panel().classList.remove('open')
+  }
+
+  function scrollBottom() {
+    const b = msgBox()
+    b.scrollTop = b.scrollHeight
+  }
+
+  function addMsg(text, role) {
+    const div = document.createElement('div')
+    div.className = `ow-msg ${role}`
+    div.innerHTML = text.replace(/\n/g, '<br>')
+    msgBox().appendChild(div)
+    scrollBottom()
+  }
+
+  function showTypingIndicator() {
+    const t = document.createElement('div')
+    t.className = 'ow-typing'
+    t.id = 'ow-typing-ind'
+    t.innerHTML = '<span></span><span></span><span></span>'
+    msgBox().appendChild(t)
+    scrollBottom()
+  }
+
+  function hideTypingIndicator() {
+    const t = document.getElementById('ow-typing-ind')
+    if (t) t.remove()
+  }
+
+  function enableInput() {
+    inp().disabled = false
+    inp().placeholder = 'ESCREVA AQUI...'
+    btn().disabled = false
+    inp().focus()
+    waiting = false
+  }
+
+  function disableInput() {
+    inp().disabled = true
+    btn().disabled = true
+    waiting = true
+  }
+
+  // ── abertura ─────────────────────────────────────────────────────────────
+  async function startChat() {
+    disableInput()
+    showTypingIndicator()
+    await new Promise(r => setTimeout(r, 900))
+    hideTypingIndicator()
+    const emailCtx = heroEmail?.value
+      ? ` Vi que você deixou o e-mail <strong>${heroEmail.value}</strong>.`
+      : ''
+    addMsg(`Olá.${emailCtx} Sou o assistente da OracleWise Studio. Em que posso ajudar?`, 'bot')
+    enableInput()
+  }
+
+  // ── chamada à IA ─────────────────────────────────────────────────────────
+  async function fetchAI(userText) {
+    messages.push({ role: 'user', content: userText })
+    disableInput()
+    showTypingIndicator()
+
+    try {
+      const res = await fetch(API_CHAT, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          messages,
+          system:    SYSTEM,
+          sessionId: sessionId,
+          email:     heroEmail?.value?.trim() || null,
+        }),
+      })
+      hideTypingIndicator()
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
+      const data  = await res.json()
+      if (data.sessionId) sessionId = data.sessionId  // guarda para próximas msgs
+      const reply = data.reply || data.content || data.message || 'Entendido. Posso ajudar com mais alguma coisa?'
+      messages.push({ role: 'assistant', content: reply })
+      addMsg(reply, 'bot')
+    } catch {
+      hideTypingIndicator()
+      addMsg('Estou com instabilidade agora. Deixa seu WhatsApp e a equipe retorna em até 2 horas.', 'bot')
+    }
+
+    enableInput()
+  }
+
+  // ── envio ────────────────────────────────────────────────────────────────
+  function owSend() {
+    if (waiting) return
+    const i   = inp()
+    const val = i.value.trim()
+    if (!val) return
+    i.value = ''
+    addMsg(val, 'user')
+    fetchAI(val)
+  }
+  window.owSend = owSend
+
+})();
 </script>
 
 </body>
