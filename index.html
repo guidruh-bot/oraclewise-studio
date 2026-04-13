@@ -1829,6 +1829,27 @@ COLETA DE LEAD: Quando o usuário demonstrar interesse real, peça sutilmente no
   let started   = false
   let messages  = []   // histórico multi-turn para a API
   let sessionId = null // ID da sessão no banco — criado no primeiro POST /api/chat
+  let leadId    = null // ID do lead salvo — usado para PATCH com messages
+
+  // ── salva/atualiza mensagens no lead ─────────────────────────────────────
+  function flushMessages() {
+    if (!messages.length) return
+    if (leadId) {
+      // atualiza lead existente com o histórico de conversa
+      fetch(API_LEADS, {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ id: leadId, messages }),
+      }).catch(() => {})
+    } else {
+      // cria novo lead somente com o histórico (sem email ainda)
+      fetch(API_LEADS, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ source: 'chatbot', messages }),
+      }).then(r => r.json()).then(d => { if (d.id) leadId = d.id }).catch(() => {})
+    }
+  }
 
   // ── integração com form hero ─────────────────────────────────────────────
   const heroEmail = document.querySelector('input[type="email"]')
@@ -1838,12 +1859,12 @@ COLETA DE LEAD: Quando o usuário demonstrar interesse real, peça sutilmente no
       applyBtn.addEventListener('click', () => {
         const email = heroEmail.value.trim()
         if (!email) return
-        // salva o lead no banco antes de abrir o chat
+        // salva o lead no banco antes de abrir o chat, guarda o id
         fetch(API_LEADS, {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ email, source: 'hero_form' }),
-        }).catch(() => {}) // silencia erro — não bloqueia o UX
+        }).then(r => r.json()).then(d => { if (d.id) leadId = d.id }).catch(() => {})
         setTimeout(() => owOpen(), 400)
       })
     }
@@ -1868,6 +1889,7 @@ COLETA DE LEAD: Quando o usuário demonstrar interesse real, peça sutilmente no
   function owClose() {
     isOpen = false
     panel().classList.remove('open')
+    flushMessages()
   }
 
   function scrollBottom() {
